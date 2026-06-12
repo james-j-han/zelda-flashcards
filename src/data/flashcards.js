@@ -1,8 +1,8 @@
 const flashcards = [
     {
         id: 1,
-        front: "Front",
-        back: "Back"
+        front: "/images/zol.png",
+        back: "Zol"
     }
 ]
 

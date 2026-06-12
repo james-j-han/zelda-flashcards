@@ -1,9 +1,16 @@
+import { useState } from 'react';
 
 const FlashCard = ( { front, back } ) => {
+
+    const [isFlipped, setFlipped] = useState(false);
+
+    const handleClick = () => {
+        setFlipped(!isFlipped);
+    }
+
     return (
-        <div className="flash-card">
-            <p>{front}</p>
-            <p>{back}</p>
+        <div className="flashcard" onClick={handleClick}>
+            {isFlipped ? <img src={front} /> : <p>{back}</p>}
         </div>
     )
 }
