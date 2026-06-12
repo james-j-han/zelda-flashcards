@@ -9,34 +9,35 @@ import flashcards from './data/flashcards';
 
 const App = () => {
 
-  const [stack, setStack] = useState([]);
+  // Lazy init
+  const [stack, setStack] = useState(() => shuffle(flashcards.map(cards => cards.id)));
   const [history, setHistory] = useState([]);
-  const [currentId, setCurrentId] = useState(null);
+
+  const currentId = stack[stack.length - 1];
 
   // Fisher-Yates algo
-  const shuffle = (cards) => {
+  function shuffle(cards) {
 
     // Create a copy instead of mutating original array directly
-    const shuffled = [...cards];
+    // const shuffled = [...cards];
+    // cards is a copy from .map so new/copy of array not needed
 
     // Start with length - 1 so we iterate one less than array length
     // because position 0 can be ignored
-    for (let i = shuffled.length - 1; i > 0; i--) {
+    for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       
       // Swap
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      [cards[i], cards[j]] = [cards[j], cards[i]];
     }
+
+    return cards;
   };
 
   return (
     <>
       <Header />
-      {
-        flashcards.map(card => (
-          <FlashCard key={card.id} front={card.front} back={card.back} />
-        ))
-      }
+      <FlashCard key={flashcards[currentId].id} front={flashcards[currentId].front} back={flashcards[currentId].back} />
     </>
   )
 }

@@ -10,7 +10,7 @@ const FlashCard = ( { front, back } ) => {
 
     return (
         <div className="flashcard" onClick={handleClick}>
-            {isFlipped ? <img src={front} /> : <p>{back}</p>}
+            {isFlipped ? <p>{back}</p> : <img src={front} />}
         </div>
     )
 }
