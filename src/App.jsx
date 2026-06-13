@@ -12,9 +12,9 @@ const App = () => {
   // Lazy init
   const [stack, setStack] = useState(() => shuffle(flashcards.map(cards => cards.id)));
   const [history, setHistory] = useState([]);
-  const [currentId, setCurrentId] = useState(stack[stack.length - 1]);
+  // const [currentId, setCurrentId] = useState(stack[stack.length - 1]);
 
-  // let currentId = stack[stack.length - 1];
+  let currentId = stack[stack.length - 1];
   // .find runs on each rerender
   let currentCard = flashcards.find(card => card.id === currentId);
 
@@ -23,10 +23,9 @@ const App = () => {
 
     // Create a copy instead of mutating original array directly
     // const shuffled = [...cards];
-    // cards is a copy from .map so new/copy of array not needed
+    // cards is already a copy from .map so above line is not needed
 
     // Start with length - 1 so we iterate one less than array length
-    // because position 0 can be ignored
     for (let i = cards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       
@@ -39,21 +38,35 @@ const App = () => {
 
   function nextCard() {
     if (stack.length > 1) {
+      // Current stack [0, 1, 2, 3, 4]
       const newStack = stack.slice(0, -1);
-      const newId = newStack[newStack.length - 1];
       setStack(newStack);
-      setHistory([...history, currentId]);
-      setCurrentId(newId);
+      // New stack [0, 1, 2, 3]
+
+      // Current ID should still be 4, add it to history stack
+      const newHistory = [...history, currentId];
+      setHistory(newHistory);
+
+      // Then set current id (should be 3)
+      currentId = newStack[newStack.length - 1];
+      console.log(`New Stack ${newStack}`);
+      console.log(`New History ${newHistory}`);
+      console.log(`Current ID: ${currentId}`);
     }
   }
 
   function previousCard() {
-    if (history.length > 1) {
+    if (history.length > 0) {
+      // Set cu
+      currentId = history[history.length - 1];
+      const newStack = [...stack, currentId];
+      setStack(newStack);
+
       const newHistory = history.slice(0, -1);
-      const newId = newHistory[newHistory.length - 1];
       setHistory(newHistory);
-      console.log(`New history: ${newHistory}`);
-      setCurrentId(newId);
+      console.log(`New Stack ${newStack}`);
+      console.log(`New History ${newHistory}`);
+      console.log(`Current ID: ${currentId}`);
     }
   }
 
