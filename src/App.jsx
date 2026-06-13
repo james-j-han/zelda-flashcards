@@ -12,8 +12,10 @@ const App = () => {
   // Lazy init
   const [stack, setStack] = useState(() => shuffle(flashcards.map(cards => cards.id)));
   const [history, setHistory] = useState([]);
+  const [currentId, setCurrentId] = useState(stack[stack.length - 1]);
 
-  let currentId = stack[stack.length - 1];
+  // let currentId = stack[stack.length - 1];
+  // .find runs on each rerender
   let currentCard = flashcards.find(card => card.id === currentId);
 
   // Fisher-Yates algo
@@ -37,14 +39,22 @@ const App = () => {
 
   function nextCard() {
     if (stack.length > 1) {
-      currentId = stack[stack.length - 1];
+      const newStack = stack.slice(0, -1);
+      const newId = newStack[newStack.length - 1];
+      setStack(newStack);
       setHistory([...history, currentId]);
-      setStack(stack.slice(0, -1));
+      setCurrentId(newId);
     }
   }
 
   function previousCard() {
-    
+    if (history.length > 1) {
+      const newHistory = history.slice(0, -1);
+      const newId = newHistory[newHistory.length - 1];
+      setHistory(newHistory);
+      console.log(`New history: ${newHistory}`);
+      setCurrentId(newId);
+    }
   }
 
   return (
