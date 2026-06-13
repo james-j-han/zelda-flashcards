@@ -31,7 +31,7 @@ const flashcards = [
     },
     {
         id: 7,
-        front: "/images/otcorok.png",
+        front: "/images/octorok.png",
         back: "Octorok"
     },
     {
@@ -47,7 +47,7 @@ const flashcards = [
     {
         id: 10,
         front: "/images/wolfos.png",
-        back: "wolfos"
+        back: "Wolfos"
     },
     {
         id: 11,

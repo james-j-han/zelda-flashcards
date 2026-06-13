@@ -13,7 +13,8 @@ const App = () => {
   const [stack, setStack] = useState(() => shuffle(flashcards.map(cards => cards.id)));
   const [history, setHistory] = useState([]);
 
-  const currentId = stack[stack.length - 1];
+  let currentId = stack[stack.length - 1];
+  let currentCard = flashcards.find(card => card.id === currentId);
 
   // Fisher-Yates algo
   function shuffle(cards) {
@@ -34,10 +35,24 @@ const App = () => {
     return cards;
   };
 
+  function nextCard() {
+    if (stack.length > 1) {
+      currentId = stack[stack.length - 1];
+      setHistory([...history, currentId]);
+      setStack(stack.slice(0, -1));
+    }
+  }
+
+  function previousCard() {
+    
+  }
+
   return (
     <>
       <Header />
-      <FlashCard key={flashcards[currentId].id} front={flashcards[currentId].front} back={flashcards[currentId].back} />
+      {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
+      <button onClick={nextCard}>Next</button>
+      <button onClick={previousCard}>Previous</button>
     </>
   )
 }
