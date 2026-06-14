@@ -69,14 +69,20 @@ const App = () => {
     }
   }
 
+  function reset() {
+    setStack(shuffle(flashcards.map(card => card.id)));
+    setHistory([]);
+  }
+
   return (
     <>
-      <Header />
+      <Header cardCount={flashcards.length} />
       <div className='flashcard-container'>
         {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
       </div>
       <div className='button-container'>
         <button onClick={previousCard}>Previous</button>
+        <button onClick={reset}>Reset</button>
         <button onClick={nextCard}>Next</button>
       </div>
     </>
