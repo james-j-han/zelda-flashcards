@@ -57,7 +57,6 @@ const App = () => {
 
   function previousCard() {
     if (history.length > 0) {
-      // Set cu
       currentId = history[history.length - 1];
       const newStack = [...stack, currentId];
       setStack(newStack);
@@ -73,9 +72,13 @@ const App = () => {
   return (
     <>
       <Header />
-      {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
-      <button onClick={nextCard}>Next</button>
-      <button onClick={previousCard}>Previous</button>
+      <div className='flashcard-container'>
+        {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
+      </div>
+      <div className='button-container'>
+        <button onClick={previousCard}>Previous</button>
+        <button onClick={nextCard}>Next</button>
+      </div>
     </>
   )
 }

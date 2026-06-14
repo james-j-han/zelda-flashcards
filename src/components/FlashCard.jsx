@@ -10,7 +10,15 @@ const FlashCard = ( { front, back } ) => {
 
     return (
         <div className="flashcard" onClick={handleClick}>
-            {isFlipped ? <p>{back}</p> : <img src={front} />}
+            <div className={`flashcard-inner ${isFlipped ? 'flipped' : ''}`}>
+                <div className='flashcard-front'>
+                    <img src={front} />
+                </div>
+                <div className='flashcard-back'>
+                    <p>{back}</p>
+                </div>
+            </div>
+            {/* {isFlipped ? <p>{back}</p> : <img src={front} />} */}
         </div>
     )
 }
