@@ -9,8 +9,11 @@ import flashcards from './data/flashcards';
 
 const App = () => {
 
+  const [shuffle, setShuffle] = useState(false);
+
   // Lazy init
-  const [stack, setStack] = useState(() => shuffle(flashcards.map(cards => cards.id)));
+  // set stack default to in order
+  const [stack, setStack] = useState(() => flashcards.map(card => card.id));
   const [history, setHistory] = useState([]);
   // const [currentId, setCurrentId] = useState(stack[stack.length - 1]);
 
@@ -19,7 +22,7 @@ const App = () => {
   let currentCard = flashcards.find(card => card.id === currentId);
 
   // Fisher-Yates algo
-  function shuffle(cards) {
+  function shuffleCards(cards) {
 
     // Create a copy instead of mutating original array directly
     // const shuffled = [...cards];
@@ -70,8 +73,23 @@ const App = () => {
   }
 
   function reset() {
-    setStack(shuffle(flashcards.map(card => card.id)));
+    // set stack based on curren shuffle value
+    setStack(shuffle ? shuffleCards(flashcards.map(card => card.id)) : flashcards.map(card => card.id));
+    // setStack(shuffle(flashcards.map(card => card.id)));
     setHistory([]);
+  }
+
+  function toggleShuffle() {
+    // need new variable to hold changed state of shuffle otherwise would use old/current value which has not updated yet
+    const newShuffle = !shuffle;
+    setShuffle(newShuffle);
+
+    const ids = flashcards.map(card => card.id);
+    // based on newShuffle value, set stack to in order or shuffled
+    setStack(newShuffle ? shuffleCards(ids) : ids);
+    // setStack(shuffle ? shuffleCards(flashcards.map(card => card.id)) : flashcards.map(card => card.id));
+    setHistory([]);
+    console.log("toggled");
   }
 
   return (
@@ -84,6 +102,7 @@ const App = () => {
         <button onClick={previousCard}>Previous</button>
         <button onClick={reset}>Reset</button>
         <button onClick={nextCard}>Next</button>
+        <button onClick={toggleShuffle}>Shuffle</button>
       </div>
     </>
   )
