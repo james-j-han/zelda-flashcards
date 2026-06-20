@@ -13,7 +13,7 @@ const App = () => {
   const [shuffle, setShuffle] = useState(false);
   
   // lift up state so children components can access (set and/or get)
-  const [correct, setCorrect] = useState(false);
+  const [correct, setCorrect] = useState(null);
 
   // Lazy init
   // set stack default to in order
@@ -60,6 +60,9 @@ const App = () => {
       console.log(`New History ${newHistory}`);
       console.log(`Current ID: ${currentId}`);
     }
+
+    // reset correct to null
+    setCorrect(null);
   }
 
   function previousCard() {
@@ -74,6 +77,9 @@ const App = () => {
       console.log(`New History ${newHistory}`);
       console.log(`Current ID: ${currentId}`);
     }
+
+    // reset correct to null
+    setCorrect(null);
   }
 
   function reset() {
@@ -81,6 +87,9 @@ const App = () => {
     setStack(shuffle ? shuffleCards(flashcards.map(card => card.id)) : flashcards.map(card => card.id));
     // setStack(shuffle(flashcards.map(card => card.id)));
     setHistory([]);
+
+    // reset correct to null
+    setCorrect(null);
   }
 
   function toggleShuffle() {
@@ -102,7 +111,7 @@ const App = () => {
       <div className='flashcard-container'>
         {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
       </div>
-      <AnswerForm back={currentCard.back} setCorrect={setCorrect}/>
+      <AnswerForm back={currentCard.back} correct={correct} setCorrect={setCorrect}/>
       <div className='button-container'>
         <button onClick={previousCard}>Previous</button>
         <button onClick={reset}>Reset</button>

@@ -1,15 +1,26 @@
 import { useState } from 'react';
 
-function AnswerForm({ back, setCorrect }) {
+function AnswerForm({ back, correct, setCorrect }) {
 
     const [userAnswer, setUserAnswer] = useState('');
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        if (userAnswer === '') return;
+        // basic trim white space and lowercase check
         const isCorrect = userAnswer.trim().toLocaleLowerCase() === back.trim().toLocaleLowerCase();
         setCorrect(isCorrect);
-        console.log(userAnswer);
-        console.log(isCorrect);
+        setHasSubmitted(true);
+
+        // clear input on submit
+        setUserAnswer('');
+    }
+
+    function handleChange(e) {
+        e.preventDefault();
+        setUserAnswer(e.target.value);
     }
 
     return (
@@ -20,10 +31,11 @@ function AnswerForm({ back, setCorrect }) {
                 placeholder='Type your answer here'
                 type="text"
                 value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value)}
+                onChange={handleChange}
                 />
             <button type='submit'>Check</button>
             </form>
+            <img className={`visual-feedback ${hasSubmitted ? 'visible' : 'hidden'}`} src={correct ? '/images/correct.png' : '/images/incorrect.png'} />
         </div>
     )
 }

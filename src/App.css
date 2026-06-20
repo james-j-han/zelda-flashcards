@@ -71,6 +71,24 @@ button:hover {
   cursor: pointer;
 }
 
+.answer-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.check-button-default {
+  background-color: gray;
+}
+
+.check-button-correct {
+  background-color: #336600;
+}
+
+.check-button-incorrect {
+  background-color: red;
+}
+
 .input-field {
   margin: 10px;
   padding-left: 10px;
@@ -78,4 +96,19 @@ button:hover {
   min-width: 160px;
   border-radius: 6px;
   border-style: none;
+}
+
+.visual-feedback {
+  width: 40px;
+  height: 40px;
+  border-style: none;
+  border-width: 0;
+}
+
+.visual-feedback.hidden {
+  opacity: 0;
+}
+
+.visual-feedback.visible {
+  opacity: 1;
 }
