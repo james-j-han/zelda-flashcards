@@ -5,11 +5,15 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import Header from './components/Header';
 import FlashCard from './components/FlashCard';
+import AnswerForm from './components/AnswerForm';
 import flashcards from './data/flashcards';
 
 const App = () => {
 
   const [shuffle, setShuffle] = useState(false);
+  
+  // lift up state so children components can access (set and/or get)
+  const [correct, setCorrect] = useState(false);
 
   // Lazy init
   // set stack default to in order
@@ -98,6 +102,7 @@ const App = () => {
       <div className='flashcard-container'>
         {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
       </div>
+      <AnswerForm back={currentCard.back} setCorrect={setCorrect}/>
       <div className='button-container'>
         <button onClick={previousCard}>Previous</button>
         <button onClick={reset}>Reset</button>

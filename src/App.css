@@ -70,3 +70,12 @@ button {
 button:hover {
   cursor: pointer;
 }
+
+.input-field {
+  margin: 10px;
+  padding-left: 10px;
+  min-height: 40px;
+  min-width: 160px;
+  border-radius: 6px;
+  border-style: none;
+}
