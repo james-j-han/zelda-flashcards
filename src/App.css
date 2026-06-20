@@ -71,22 +71,18 @@ button:hover {
   cursor: pointer;
 }
 
+button.enabled {
+  background-color: #336600;
+}
+
+button.disabled {
+  background-color: gray;
+}
+
 .answer-form {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.check-button-default {
-  background-color: gray;
-}
-
-.check-button-correct {
-  background-color: #336600;
-}
-
-.check-button-incorrect {
-  background-color: red;
 }
 
 .input-field {

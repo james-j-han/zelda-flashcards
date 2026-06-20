@@ -25,6 +25,10 @@ const App = () => {
   // .find runs on each rerender
   let currentCard = flashcards.find(card => card.id === currentId);
 
+  // keep track if we are at the beginning or end for button styling (enabled/disabled)
+  const isAtStart = history.length === 0; // history is empty so prevButton should be grayed/disabled
+  const isAtEnd = stack.length <= 1; // stack is empty so nextButton should be grayed/disabled
+
   // Fisher-Yates algo
   function shuffleCards(cards) {
 
@@ -56,9 +60,6 @@ const App = () => {
 
       // Then set current id (should be 3)
       currentId = newStack[newStack.length - 1];
-      console.log(`New Stack ${newStack}`);
-      console.log(`New History ${newHistory}`);
-      console.log(`Current ID: ${currentId}`);
     }
 
     // reset correct to null
@@ -73,9 +74,6 @@ const App = () => {
 
       const newHistory = history.slice(0, -1);
       setHistory(newHistory);
-      console.log(`New Stack ${newStack}`);
-      console.log(`New History ${newHistory}`);
-      console.log(`Current ID: ${currentId}`);
     }
 
     // reset correct to null
@@ -83,7 +81,7 @@ const App = () => {
   }
 
   function reset() {
-    // set stack based on curren shuffle value
+    // set stack based on current shuffle value
     setStack(shuffle ? shuffleCards(flashcards.map(card => card.id)) : flashcards.map(card => card.id));
     // setStack(shuffle(flashcards.map(card => card.id)));
     setHistory([]);
@@ -113,9 +111,9 @@ const App = () => {
       </div>
       <AnswerForm back={currentCard.back} correct={correct} setCorrect={setCorrect}/>
       <div className='button-container'>
-        <button onClick={previousCard}>Previous</button>
+        <button className={isAtStart ? 'disabled' : 'enabled'} onClick={previousCard}>Previous</button>
         <button onClick={reset}>Reset</button>
-        <button onClick={nextCard}>Next</button>
+        <button className={isAtEnd ? 'disabled' : 'enabled'} onClick={nextCard}>Next</button>
         <button onClick={toggleShuffle}>Shuffle</button>
       </div>
     </>
