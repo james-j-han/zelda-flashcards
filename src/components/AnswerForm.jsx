@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-function AnswerForm({ back, correct, setCorrect }) {
+function AnswerForm({ back, currentStreak, setCurrentStreak, longestStreak, setLongestStreak, correct, setCorrect }) {
 
     const [userAnswer, setUserAnswer] = useState('');
     const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -12,6 +12,20 @@ function AnswerForm({ back, correct, setCorrect }) {
         // basic trim white space and lowercase check
         const isCorrect = userAnswer.trim().toLocaleLowerCase() === back.trim().toLocaleLowerCase();
         setCorrect(isCorrect);
+
+        // increment or reset currentStreak and/or longestStreak
+        if (isCorrect) {
+            // setCounter(counter + 1);
+            const streak = currentStreak + 1;
+            setCurrentStreak(streak);
+
+            if (streak > longestStreak) {
+                setLongestStreak(streak);
+            }
+        } else {
+            setCurrentStreak(0);
+        }
+        // isCorrect ? setCounter(counter + 1) : setCounter(0);
         setHasSubmitted(true);
 
         // clear input on submit
@@ -22,6 +36,11 @@ function AnswerForm({ back, correct, setCorrect }) {
         e.preventDefault();
         setUserAnswer(e.target.value);
     }
+
+    // set setHasSubmitted back to false on each new card
+    useEffect(() => {
+        setHasSubmitted(false);
+    }, [back]);
 
     return (
         <div className="answer-form">

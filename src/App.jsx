@@ -6,6 +6,7 @@ import './App.css'
 import Header from './components/Header';
 import FlashCard from './components/FlashCard';
 import AnswerForm from './components/AnswerForm';
+import Stats from './components/Stats';
 import flashcards from './data/flashcards';
 
 const App = () => {
@@ -28,6 +29,10 @@ const App = () => {
   // keep track if we are at the beginning or end for button styling (enabled/disabled)
   const isAtStart = history.length === 0; // history is empty so prevButton should be grayed/disabled
   const isAtEnd = stack.length <= 1; // stack is empty so nextButton should be grayed/disabled
+
+  // keep track of current and longest streak
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [longestStreak, setLongestStreak] = useState(0);
 
   // Fisher-Yates algo
   function shuffleCards(cards) {
@@ -106,10 +111,19 @@ const App = () => {
   return (
     <>
       <Header cardCount={flashcards.length} />
+      <Stats currentStreak={currentStreak} longestStreak={longestStreak} />
       <div className='flashcard-container'>
         {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
       </div>
-      <AnswerForm back={currentCard.back} correct={correct} setCorrect={setCorrect}/>
+      <AnswerForm
+        back={currentCard.back}
+        currentStreak= {currentStreak}
+        setCurrentStreak={setCurrentStreak}
+        longestStreak={longestStreak}
+        setLongestStreak={setLongestStreak}
+        correct={correct}
+        setCorrect={setCorrect}
+      />
       <div className='button-container'>
         <button className={isAtStart ? 'disabled' : 'enabled'} onClick={previousCard}>Previous</button>
         <button onClick={reset}>Reset</button>
