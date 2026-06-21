@@ -7,6 +7,7 @@ import Header from './components/Header';
 import FlashCard from './components/FlashCard';
 import AnswerForm from './components/AnswerForm';
 import Stats from './components/Stats';
+import MasteredGrid from './components/MasteredGrid'
 import flashcards from './data/flashcards';
 
 const App = () => {
@@ -16,9 +17,17 @@ const App = () => {
   // lift up state so children components can access (set and/or get)
   const [correct, setCorrect] = useState(null);
 
+  // keep track of mastered cards ids
+  const [masteredIds, setMasteredIds] = useState([]);
+
+  // filter through json data and return any id that is not in masteredIds (empty currently so should return all)
+  const unmasteredCards = flashcards.filter(card => !masteredIds.includes(card.id));
+  // same for mastered cards for use in MasteredGrid visual feedback component
+  const masteredCards = flashcards.filter(card => masteredIds.includes(card.id));
+
   // Lazy init
   // set stack default to in order
-  const [stack, setStack] = useState(() => flashcards.map(card => card.id));
+  const [stack, setStack] = useState(() => unmasteredCards.map(card => card.id));
   const [history, setHistory] = useState([]);
   // const [currentId, setCurrentId] = useState(stack[stack.length - 1]);
 
@@ -86,7 +95,10 @@ const App = () => {
   }
 
   function reset() {
+    // clear mastered ids
+    setMasteredIds([]);
     // set stack based on current shuffle value
+    // use flashcards.map instead of unmasteredCards.map (out of sync)
     setStack(shuffle ? shuffleCards(flashcards.map(card => card.id)) : flashcards.map(card => card.id));
     // setStack(shuffle(flashcards.map(card => card.id)));
     setHistory([]);
@@ -100,7 +112,7 @@ const App = () => {
     const newShuffle = !shuffle;
     setShuffle(newShuffle);
 
-    const ids = flashcards.map(card => card.id);
+    const ids = unmasteredCards.map(card => card.id);
     // based on newShuffle value, set stack to in order or shuffled
     setStack(newShuffle ? shuffleCards(ids) : ids);
     // setStack(shuffle ? shuffleCards(flashcards.map(card => card.id)) : flashcards.map(card => card.id));
@@ -108,13 +120,24 @@ const App = () => {
     console.log("toggled");
   }
 
+  function markAsMastered(cardId) {
+    
+    // add cardId to mastered list
+    setMasteredIds(prev => [...prev, cardId]);
+
+    // remove mastered card from current stack
+    setStack(prev => prev.filter(id => id !== cardId));
+  }
+
   return (
     <>
-      <Header cardCount={flashcards.length} />
+      <Header cardCount={unmasteredCards.length} shuffle={shuffle} />
       <Stats currentStreak={currentStreak} longestStreak={longestStreak} />
-      <div className='flashcard-container'>
-        {currentCard && (<FlashCard key={currentCard.id} front={currentCard.front} back={currentCard.back} />)}
-      </div>
+      {currentCard && (<FlashCard 
+        key={currentCard.id}
+        front={currentCard.front}
+        back={currentCard.back}
+        onMaster={() => markAsMastered(currentCard.id)} />)}
       <AnswerForm
         back={currentCard.back}
         currentStreak= {currentStreak}
@@ -130,6 +153,7 @@ const App = () => {
         <button className={isAtEnd ? 'disabled' : 'enabled'} onClick={nextCard}>Next</button>
         <button onClick={toggleShuffle}>Shuffle</button>
       </div>
+      <MasteredGrid cards={masteredCards} />
     </>
   )
 }
